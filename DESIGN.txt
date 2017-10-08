@@ -1,0 +1,42 @@
+Design of E-Commerce Review Finding System
+
+1. Extract Meta Data From Input Url and store product information in a uniform abstraction
+   to support multiple schemas - opengraph, rdf etc. 	
+	- Product Name & Model Number
+	- Manufacturers Name
+	- Description 
+	
+2. Web Crawl different online sources for reviews & ratings. 
+	Issues to consider
+		- Immutability of data : 
+			Do we need to keep all reviews in sync with the sites? 
+		  	What happens when the user changes his review? Keeping
+		  	things in sync looks to be challenging. Maybe we are better
+		  	off appending all reviews periodically and showing our
+		  	users only the most recent reviews.
+		  	A distributed file system would be a good solution for this type of storage
+		 - How often do we recrawl the Web : 
+		 	Crawling potentially millions of products is computational intensive.
+		 	For e.g. Amazon India claims 60 Million products. Assuming all product pages
+		 	are a modest 1MB in size, this would require 60Tb of storage. 
+		 	Also downloading these sites would take (@ 1 page/sec) around 695 days on a single
+		 	core processor without concurrent network requests. Allowing for concurrent
+		 	threads (upto 10), this will still take 70 days.  
+		 	A cloud based cluster could drastically reduce the time taken for
+		 	such crawling
+		- Consistent interface of crawled data
+			Different sites store data differently. We need to abstract out this
+			difference. I have assumed all reviews should have following characteristics
+				- Author
+				- Text
+				- Url 
+				- Timestamp (not implemented in the project)
+				
+				Potential New Fields :
+					- # of likes / upvotes
+					- # of downvotes
+					- image content
+3. Searching and matching 
+	The accuracy of matching input url with reviews depends on searching for a matching
+	product across ecommerce sites. Text based searching will result in significant
+	false positives. An NLP based searching could be tried for better results. 

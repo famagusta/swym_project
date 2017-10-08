@@ -1,0 +1,3 @@
+python getFlipkartAppleIds.py 
+python getFlipkartAppleReviews.py
+python getFlipkartAppleMetaData.py 
